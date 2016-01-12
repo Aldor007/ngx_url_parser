@@ -7,6 +7,6 @@ Name: lib_ngx_url
 Description: URI parsing and handling library
 
 Version: @VERSION@
-URL: https://github.com/Aldor007/ngx_url_parser
+URL: https://github.com/DreamLab/ngx_url_parser
 Libs: -L${libdir} -lngx_url_parser
 Cflags: -I${includedir}

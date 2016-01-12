@@ -18,7 +18,7 @@ before_install:
     - sudo apt-get install pkg-config
 script:
     - rm -f makefile
-    - cmake CMakeLists.txt -DNGX_URL_TESTS_COVERAGE=ON -DBUILD_TESTS=ON
+    - cmake CMakeLists.txt -DBUILD_TESTS=ON -DNGX_URL_TESTS_COVERAGE=ON
     - make
     - make coverage
     - ./tests/unit_tests

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([ngx_url_parser], [1.1.0], [marcin.kaciuba@gmail.com])
-AM_INIT_AUTOMAKE(ngx_url_parser, 1.1.0)
+AC_INIT([ngx_url_parser], [1.1.2], [marcin.kaciuba@gmail.com])
+AM_INIT_AUTOMAKE(ngx_url_parser, 1.1.2)
 
 # Checks for programs.
 AC_PROG_CXX

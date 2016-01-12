@@ -178,7 +178,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
 
     init_default_meta(r);
 
-    r->scheme_start = b;
+    r->url_start = b;
 
     sw_state state = sw_scheme;
 
@@ -197,15 +197,18 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
             if (c >= 'a' && c <= 'z') {
                 break;
             }
-
             switch (ch) {
                 case ':':
+                    // here we have scheme
+                    r->scheme_start = r->url_start;
+                    r->uri_start = NULL;
+
                     r->scheme_end = p;
                     state = sw_scheme_slash;
                     break;
                 case '/':
                     state = sw_uri;
-                    r->uri_start = p;
+                    r->uri_start = r->url_start;
                     break;
                 case '?':
                     if (counter <= len) {
@@ -215,10 +218,10 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                     break;
 
                 default:
-                    #ifdef NGX_DEBUG
-                        printf("scheme isn't valid!\n");
-                    #endif
-                    return NGX_URL_INVALID;
+                    state = sw_uri;
+                    r->uri_start = r->url_start;
+                    break;
+
             }
             break;
 

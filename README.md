@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/Aldor007/ngx_url_parser.svg)](https://travis-ci.org/Aldor007/ngx_url_parser)
-[![Coverage Status](https://coveralls.io/repos/Aldor007/ngx_url_parser/badge.svg?branch=master&service=github)](https://coveralls.io/github/Aldor007/ngx_url_parser?branch=master)
+[![Build Status](https://travis-ci.org/DreamLab/ngx_url_parser.svg)](https://travis-ci.org/DreamLab/ngx_url_parser)
+[![Coverage Status](https://coveralls.io/repos/DreamLab/ngx_url_parser/badge.svg?branch=master&service=github)](https://coveralls.io/github/DreamLab/ngx_url_parser?branch=master)
 
 ngx_url_parser
 ==============
