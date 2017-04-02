@@ -178,7 +178,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
 
     init_default_meta(r);
 
-    r->scheme_start = b;
+    r->url_start = b;
 
     sw_state state = sw_scheme;
 
@@ -200,12 +200,16 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
 
             switch (ch) {
                 case ':':
+                    // here we have scheme
+                    r->scheme_start = r->url_start;
+                    r->uri_start = NULL;
+
                     r->scheme_end = p;
                     state = sw_scheme_slash;
                     break;
                 case '/':
-                    state = sw_uri;
-                    r->uri_start = p;
+                    state = sw_scheme_slash_slash;
+                    r->uri_start = r->url_start;
                     break;
                 case '?':
                     if (counter <= len) {
@@ -213,12 +217,21 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                     }
                     state = sw_args;
                     break;
-
+                case '#':
+                    if (counter <= len) {
+                        r->fragment_start = p + 1;
+                    }
+                    state = sw_fragment;
+                    break;
+                case '\0':
+                    r->uri_start = r->url_start;
+                    r->uri_end = p;
+                    goto done;
+                    break;
                 default:
-                    #ifdef NGX_DEBUG
-                        printf("scheme isn't valid!\n");
-                    #endif
-                    return NGX_URL_INVALID;
+                    state = sw_uri;
+                    r->uri_start = r->url_start;
+                    break;
             }
             break;
 
@@ -236,15 +249,32 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
             break;
 
         case sw_scheme_slash_slash:
+
+            if (ch != '/' && (usual[ch >> 5] & (1 << (ch & 0x1f)))) {
+                state = sw_uri;
+                break;
+            }
+
             switch (ch) {
                 case '/':
+                    r->uri_start = NULL;
                     state = sw_host_start;
                     break;
+                case '?':
+                    r->uri_end = p;
+                    if (counter <= len) {
+                        r->args_start = p + 1;
+                    }
+                    state = sw_args;
+                    break;
+                case '\0':
+                    r->uri_start = r->url_start;
+                    r->uri_end = p;
+                    goto done;
+                    break;
                 default:
-                    #ifdef NGX_DEBUG
-                        printf("No second slash after scheme\n");
-                    #endif
-                    return NGX_URL_INVALID;
+                    state = sw_uri;
+                    break;
                 }
             break;
 
@@ -268,7 +298,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                 break;
             }
 
-            if ((ch >= '0' && ch <= '9') || ch == '.' || ch == '-') {
+            if ((ch >= '0' && ch <= '9') || ch == '.' || ch == '-' || ch == '_') {
                 break;
             }
 
@@ -388,6 +418,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                     r->auth_end = p;
                     r->auth_start = r->host_start;
                     r->host_start = NULL;
+                    r->host_end = NULL;
                     r->port_start = NULL;
                     r->port_end = NULL;
                     state = sw_host_start;
@@ -399,7 +430,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                 }
             break;
 
-        /* URI */
+        /* URI path */
         case sw_uri:
 
             if (usual[ch >> 5] & (1 << (ch & 0x1f))) {
@@ -410,6 +441,7 @@ int ngx_url_parser_meta(ngx_http_url_meta *r, const char *b) {
                 case '\0':
                     r->uri_end = p;
                     goto done;
+                    break;
                 case '#':
                     r->uri_end = p;
                     if (counter <= len) {
