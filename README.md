@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/Aldor007/ngx_url_parser.svg)](https://travis-ci.org/Aldor007/ngx_url_parser)
-[![Coverage Status](https://coveralls.io/repos/Aldor007/ngx_url_parser/badge.svg?branch=master&service=github)](https://coveralls.io/github/Aldor007/ngx_url_parser?branch=master)
+[![Build Status](https://travis-ci.org/aldor007/ngx_url_parser.svg)](https://travis-ci.org/aldor007/ngx_url_parser)
+[![Coverage Status](https://coveralls.io/repos/aldor007/ngx_url_parser/badge.svg?branch=master&service=github)](https://coveralls.io/github/aldor007/ngx_url_parser?branch=master)
 
 ngx_url_parser
 ==============
@@ -12,7 +12,7 @@ Usage:
 Include ngx_url_parser.h and then
 ```C
 const char * str = "https://user:password@mkaciuba.pl:555/path/?query#fragment";
-// structure in with result will be stored
+// struct in with result will be stored
 ngx_http_url url;
 
 // run parser
