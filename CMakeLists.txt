@@ -4,11 +4,12 @@ set(BUILD_TESTS OFF)
 option(BUILD_TESTS "Build tests?" OFF)
 
 set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fPIC -O1")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fPIC -O3")
 
 add_executable(example ngx_url_parser.c example.c)
 add_library(ngx_url_parser STATIC ngx_url_parser.c)
 
 if(BUILD_TESTS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
     add_subdirectory(tests)
 endif()

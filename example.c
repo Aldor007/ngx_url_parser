@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     const char * str = "https://user:password@mkaciuba.pl:555/path/?query#fragment";
-    // structure in with result will be stored
+    // struct in with result will be stored
     ngx_http_url url;
 
     int status = ngx_url_parser(&url, str);

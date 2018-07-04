@@ -4,18 +4,25 @@ before_install:
     - sudo apt-get update
     # coverage
     - sudo apt-get install lcov
-    - sudo pip install cpp-coveralls
+    - sudo pip install -U cpp-coveralls
     - sudo pip install gcovr
 
-    # gtests
-    - sudo apt-get install libgtest-dev
-    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
-
-    # autotools
+      # autotools
     - sudo apt-get install automake
     - sudo apt-get install autoconf
     - sudo apt-get install libtool
-    - sudo apt-get install pkg-config
+    - sudo apt-get install pkg-config cmake
+
+    # gtests
+    - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
+    - sudo tar xf release-1.7.0.tar.gz
+    - cd googletest-release-1.7.0
+    - sudo cmake -DBUILD_SHARED_LIBS=ON .
+    - sudo make
+    - sudo cp -a include/gtest /usr/include
+    - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
+
+    - cd "${TRAVIS_BUILD_DIR}"
 script:
     - rm -f makefile
     - cmake CMakeLists.txt -DNGX_URL_TESTS_COVERAGE=ON -DBUILD_TESTS=ON
