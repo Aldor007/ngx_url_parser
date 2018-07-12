@@ -12,7 +12,7 @@ Usage:
 Include ngx_url_parser.h and then
 ```C
 const char * str = "https://user:password@mkaciuba.pl:555/path/?query#fragment";
-// struct in with result will be stored
+// struct in which result will be stored
 ngx_http_url url;
 
 // run parser
